@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,20 +24,51 @@ public class PessoaDAO {
         md = new ManipulaData();
     }
     
-    public void salvar(Pessoa p){
+    public Pessoa salvar(Pessoa p){
         try{
             /*Estabele um espaço para "preparar" o SQL que será executado no banco.
             Cada simbolo "?" será substituido por valores contidos em variaveis de uma classe java.
             Através dos métodos "set" da classe PreparedStatement são atributos os valores para os espaços referentes aos simbolos "?"*/
             
             System.out.println(md.string2date(p.getData()));
-            PreparedStatement stmt = conn.prepareStatement ("INSERT INTO pessoa(nome, data_nascimento) values(?,?)");
+            PreparedStatement stmt = conn.prepareStatement ("INSERT INTO pessoa(nome, data_nascimento) values(?,?)", Statement.RETURN_GENERATED_KEYS);
             stmt.setString(1, p.getNome());
             stmt.setDate(2, md.string2date(p.getData()));
             stmt.execute();//Executa o SQL no banco
+            ResultSet rs = stmt.getGeneratedKeys();
+            if(rs.next()){
+                p.setIdpessoa(rs.getInt("idpessoa"));
+            }else {
+                p.setIdpessoa(-1);
+            }
         } catch(SQLException ex) {
             ex.printStackTrace();
         }
+        return p;
+    }
+    
+    public void editar(Pessoa p){
+        try{
+            PreparedStatement stmt = conn.prepareStatement("UPDATE pessoa SET nome = ?, data_nascimento = ? " + "WHERE idpessoa = ?");
+            stmt.setString(1, p.getNome());
+            stmt.setDate(2, md.string2date(p.getData()));
+            stmt.setInt(3, p.getIdpessoa());
+            stmt.executeUpdate();
+        } catch(SQLException ex){
+            ex.printStackTrace();
+        }
+    }
+    
+    public int excluir(Pessoa p){
+        int verif = 0;
+        try{
+            PreparedStatement stmt = conn.prepareStatement("DELETE FROM pessoa WHERE idpessoa = ?");
+            stmt.setInt(1, p.getIdpessoa());
+            verif = stmt.executeUpdate();
+        }catch(SQLException ex){
+            ex.printStackTrace();
+        }
+        return verif;
     }
     
     /*O método "getPessoas" retorna um valor do tipo "List<Pessoa>"*/
@@ -67,6 +99,7 @@ public class PessoaDAO {
                     Cada pessoa extraida pelo metodo "getPessoa" é adicionada em uma lista de pessoas, no caso,
                 na lista "lstP".
                 */
+                lstP.add(getPessoa(rs));
             }
         }
         catch(SQLException ex){
@@ -75,15 +108,33 @@ public class PessoaDAO {
         return lstP;
     } 
     
+    public List<Pessoa> getPessoas(Pessoa p){
+        List<Pessoa> lstP = new ArrayList<>();
+        ResultSet rs;
+        try{
+            PreparedStatement ppStmt = conn.prepareStatement("SELECT * FROM pessoa WHERE nome ILIKE ?");
+            ppStmt.setString(1,p.getNome()+ "%");
+            rs = ppStmt.executeQuery();
+            while(rs.next()){
+                lstP.add(getPessoa(rs));
+            }
+        }catch(SQLException ex){
+            ex.printStackTrace();
+        }
+        return lstP;
+    }
+    
     public Pessoa getPessoa(ResultSet rs) throws SQLException
     {
         Pessoa p = new Pessoa();
         
         p.setIdpessoa(rs.getInt("idpessoa"));
         p.setNome(rs.getString("nome"));
-        p.setData(rs.getString("data_nascimento"));
+        p.setData(md.date2String(rs.getString("data_nascimento")));
         
         return p;
     }
+    
+    
     
 }

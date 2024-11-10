@@ -16,11 +16,23 @@ public class PessoaBO {
         pDAO = new PessoaDAO();
     }
 
-    public void salvar(Pessoa p) {
-        pDAO.salvar(p);
+    public Pessoa salvar(Pessoa p) {
+        return pDAO.salvar(p);
+    }
+    
+    public void editar(Pessoa p) {
+        pDAO.editar(p);
+    }
+    
+    public int excluir(Pessoa p) {
+        return pDAO.excluir(p);
     }
     
     public List<Pessoa> getPessoas(){
         return pDAO.getPessoas();
+    }
+    
+    public List<Pessoa> getPessoas(Pessoa p){
+        return pDAO.getPessoas(p);
     }
 }

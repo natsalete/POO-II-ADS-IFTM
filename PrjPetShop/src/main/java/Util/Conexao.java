@@ -10,8 +10,8 @@ public class Conexao {
     "private" define que a variavel ser apenas na classe*/
     
     final private String driver="org.postgresql.Driver";
-    final private String url="jdbc:postrgresql://localhost:5432/" + "bd_petshop";
-    final private String usuario = "postrgresql";
+    final private String url="jdbc:postgresql://localhost:5432/" + "bd_petshop";
+    final private String usuario = "postgres";
     final private String senha = "123456";
     
     /**Atraves desse método será possível fazer  a conexão com banco de dados.*/
