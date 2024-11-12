@@ -35,4 +35,17 @@ public class PessoaBO {
     public List<Pessoa> getPessoas(Pessoa p){
         return pDAO.getPessoas(p);
     }
+    
+    public List<Pessoa> getPessoas(String nome){
+        return pDAO.getPessoas(nome);
+    }
+    
+    public List<Pessoa> getPessoas(String nome, String dataInicio, String dataFim){
+        return pDAO.getPessoas(nome, dataInicio, dataFim);
+    }
+    
+    public List<Pessoa> getPessoas(String dataInicio, String dataFim){
+        return pDAO.getPessoas(dataInicio, dataFim);
+    }
+    
 }

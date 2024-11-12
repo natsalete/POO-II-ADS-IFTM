@@ -124,6 +124,57 @@ public class PessoaDAO {
         return lstP;
     }
     
+    public List<Pessoa> getPessoas(String nome){
+        List<Pessoa> lstP = new ArrayList<>();
+        ResultSet rs;
+        try{
+            PreparedStatement ppStmt = conn.prepareStatement("SELECT * FROM pessoa WHERE nome ILIKE ?");
+            ppStmt.setString(1,nome+ "%");
+            rs = ppStmt.executeQuery();
+            while(rs.next()){
+                lstP.add(getPessoa(rs));
+            }
+        }catch(SQLException ex){
+            ex.printStackTrace();
+        }
+        return lstP;
+    }
+    
+    public List<Pessoa> getPessoas(String nome, String dataInicio, String dataFim){
+        List<Pessoa> lstP = new ArrayList<>();
+        ResultSet rs;
+        try{
+            PreparedStatement ppStmt = conn.prepareStatement("SELECT * FROM pessoa WHERE nome ILIKE ? AND data_nascimento BETWEEN ? AND ?");
+            ppStmt.setString(1,nome+ "%");
+            ppStmt.setString(2,md.date2String(dataInicio));
+            ppStmt.setString(3,md.date2String(dataFim));
+            rs = ppStmt.executeQuery();
+            while(rs.next()){
+                lstP.add(getPessoa(rs));
+            }
+        }catch(SQLException ex){
+            ex.printStackTrace();
+        }
+        return lstP;
+    }
+    
+    public List<Pessoa> getPessoas(String dataInicio, String dataFim){
+        List<Pessoa> lstP = new ArrayList<>();
+        ResultSet rs;
+        try{
+            PreparedStatement ppStmt = conn.prepareStatement("SELECT * FROM pessoa WHERE data_nascimento BETWEEN ? AND ?");
+            ppStmt.setString(1,md.date2String(dataInicio));
+            ppStmt.setString(2,md.date2String(dataFim));
+            rs = ppStmt.executeQuery();
+            while(rs.next()){
+                lstP.add(getPessoa(rs));
+            }
+        }catch(SQLException ex){
+            ex.printStackTrace();
+        }
+        return lstP;
+    }
+    
     public Pessoa getPessoa(ResultSet rs) throws SQLException
     {
         Pessoa p = new Pessoa();
