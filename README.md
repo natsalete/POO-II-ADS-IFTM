@@ -22,6 +22,9 @@ O repositório está organizado da seguinte forma:
 - **PrjAula23_09_2024/**: Contém o projeto desenvolvido na aula do dia 23 de setembro de 2024.
 - **PrjPetShop/**: Projeto de um sistema para gerenciamento de um pet shop.
 - **ProjetoAula1_19_09_2024/**: Projeto inicial desenvolvido na aula do dia 19 de setembro de 2024.
+- **Prj_Ex_MVC_POO**: Exemplo de um projeto com arquitetura MVC.
+- **Prj_Nsr_Loja**: Projeto de um sistema para gerenciamento de uma loja.
+- **Prj_Sistema_de_Getao_financeira**: Projeto de um sistema de gerenciamento financeiro.
 
 Cada diretório contém o código-fonte correspondente ao projeto ou atividade realizada.
 
